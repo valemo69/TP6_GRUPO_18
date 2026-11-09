@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TP6_GRUPO_18</string>
+    <string name="menu_agregar">Agregar Contacto</string>
+    <string name="menu_listado">Listado de Contactos</string>
 </resources>
