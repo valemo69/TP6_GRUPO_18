@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -7,13 +7,215 @@
     android:layout_height="match_parent"
     tools:context=".FormAgregarContacto">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FORMULARIO DE CONTACTO"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="20sp"
+        android:gravity="center"/>
+
+    <TableRow android:layout_marginBottom="20dp" android:layout_marginTop="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Este es un formulario destinado al registro de personas, sus datos personales e intereses."
+            android:textSize="14sp" />
+    </TableRow>
+    <!-- CAMPO: NOMBRE -->
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:text="NOMBRE"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginLeft="5sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="12dp">
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:hint="Nombre"
+            android:inputType="text"
+            android:textSize="12sp" />
+    </TableRow>
+
+    <!-- CAMPO: APELLIDO -->
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:text="APELLIDO"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginLeft="5sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="12dp">
+
+        <EditText
+            android:id="@+id/etApellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:hint="Apellido"
+            android:inputType="text"
+            android:textSize="12sp" />
+    </TableRow>
+
+    <!-- CAMPO: TELÉFONO Y SU SPINNER -->
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:text="TELÉFONO"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </TableRow>
+    <TableRow android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="497dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etTelefono"
+                android:layout_width="271dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20sp"
+                android:hint="Telefono"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:textSize="12sp" />
+
+            <Spinner
+                android:id="@+id/spinnerTelefono"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="30sp" />
+        </LinearLayout>
+    </TableRow>
+
+    <!-- CAMPO: EMAIL Y SU SPINNER -->
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:maxLength="30"
+            android:text="EMAIL"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </TableRow>
+    <TableRow android:layout_marginBottom="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="271dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20sp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textSize="12sp" />
+
+            <Spinner
+                android:id="@+id/spinnerEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="30sp" />
+        </LinearLayout>
+    </TableRow>
+
+    <!-- CAMPO: DIRECCION -->
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:text="DIRECCION"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginLeft="5sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="12dp">
+
+        <EditText
+            android:id="@+id/etDireccion"
+            android:layout_width="507dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:hint="Direccion"
+            android:inputType="text"
+            android:textSize="12sp" />
+    </TableRow>
+
+    <!-- CAMPO: FECHA DE NACIMIENTO -->
+    <TableRow>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:text="FECHA DE NACIMIENTO"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginLeft="5sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="24dp">
+
+        <EditText
+            android:id="@+id/etFechaNacimiento"
+            android:layout_width="323dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:hint="Fecha nacimiento"
+            android:inputType="date"
+            android:textSize="12sp" />
+    </TableRow>
+
+    <!-- BOTÓN CONTINUAR -->
+    <TableRow>
+        <Button
+            android:id="@+id/btnContinuar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CONTINUAR"
+            android:layout_gravity="start" />
+    </TableRow>
+
+</TableLayout>
