@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,6 +31,7 @@ public class FormAgregarContacto extends AppCompatActivity {
     EditText direccion;
     EditText fechaNacimiento;
     Button btnContinuar;
+    Spinner spinnerTelefono, spinnerEmail;
 
 
 
@@ -40,18 +43,21 @@ public class FormAgregarContacto extends AppCompatActivity {
         setContentView(R.layout.activity_form_agregar_contacto);
 
         nombre = findViewById(R.id.etNombre);
-
-
-
         apellido = findViewById(R.id.etApellido);
         telefono = findViewById(R.id.etTelefono);
         email = findViewById(R.id.etEmail);
         direccion = findViewById(R.id.etDireccion);
         fechaNacimiento = findViewById(R.id.etFechaNacimiento);
         btnContinuar = findViewById(R.id.btnContinuar);
+        spinnerTelefono = findViewById(R.id.spinnerTelefono);
+        spinnerEmail = findViewById(R.id.spinnerEmail);
+
+        cargarSpinners();
 
         btnContinuar.setOnClickListener(v -> {
-            validarFormulario();
+            if (validarFormulario()) {
+                enviarDatosSiguienteFormulario();
+            }
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -70,7 +76,6 @@ public class FormAgregarContacto extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.menu_agregar) {
             return true;
         } else if (id == R.id.menu_listado) {
@@ -78,11 +83,10 @@ public class FormAgregarContacto extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void validarFormulario() {
+    private boolean validarFormulario() {
 
         // Recuperamos los valores ingresados
         String nombreIngresado = nombre.getText().toString().trim();
@@ -103,66 +107,61 @@ public class FormAgregarContacto extends AppCompatActivity {
         if (nombreIngresado.isEmpty()) {
             nombre.setError("El nombre es obligatorio");
             nombre.requestFocus();
-            return;
+            return false;
         }
 
         if (!nombreIngresado.matches("[\\p{L}]+(?:[ '\\-][\\p{L}]+)*")) {
             nombre.setError("El nombre no puede contener números");
             nombre.requestFocus();
-            return;
+            return false;
         }
-
 
         if (apellidoIngresado.isEmpty()) {
             apellido.setError("El apellido es obligatorio");
             apellido.requestFocus();
-            return;
+            return false;
         }
 
         if (!apellidoIngresado.matches("[\\p{L}]+(?:[ '\\-][\\p{L}]+)*")) {
             apellido.setError("El apellido no puede contener números");
             apellido.requestFocus();
-            return;
+            return false;
         }
-
 
         if (telefonoIngresado.isEmpty()) {
             telefono.setError("El teléfono es obligatorio");
             telefono.requestFocus();
-            return;
+            return false;
         }
 
         if (!telefonoIngresado.matches("[0-9]+(?:-[0-9]+)*")) {
             telefono.setError("Ingrese solamente números o guiones");
             telefono.requestFocus();
-            return;
+            return false;
         }
-
 
         if (emailIngresado.isEmpty()) {
             email.setError("El email es obligatorio");
             email.requestFocus();
-            return;
+            return false;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(emailIngresado).matches()) {
             email.setError("Ingrese un email válido");
             email.requestFocus();
-            return;
+            return false;
         }
-
 
         if (direccionIngresada.isEmpty()) {
             direccion.setError("La dirección es obligatoria");
             direccion.requestFocus();
-            return;
+            return false;
         }
-
 
         if (fechaIngresada.isEmpty()) {
             fechaNacimiento.setError("La fecha es obligatoria");
             fechaNacimiento.requestFocus();
-            return;
+            return false;
         }
 
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -174,10 +173,33 @@ public class FormAgregarContacto extends AppCompatActivity {
         if (fecha == null || posicion.getIndex() != fechaIngresada.length()) {
             fechaNacimiento.setError("Ingrese una fecha válida (dd/MM/yyyy)");
             fechaNacimiento.requestFocus();
-            return;
+            return false;
         }
 
-       
-        Toast.makeText(this, "Formulario válido", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    private void cargarSpinners() {
+        String[] opciones = {"Casa", "Trabajo", "Móvil"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opciones);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerTelefono.setAdapter(adapter);
+        spinnerEmail.setAdapter(adapter);
+    }
+
+    private void enviarDatosSiguienteFormulario() {
+        Intent intent = new Intent(FormAgregarContacto.this, FormMasDatosContacto.class);
+
+        intent.putExtra("NOMBRE", nombre.getText().toString().trim());
+        intent.putExtra("APELLIDO", apellido.getText().toString().trim());
+        intent.putExtra("TELEFONO", telefono.getText().toString().trim());
+        intent.putExtra("TIPO_TELEFONO", spinnerTelefono.getSelectedItem().toString());
+        intent.putExtra("EMAIL", email.getText().toString().trim());
+        intent.putExtra("TIPO_EMAIL", spinnerEmail.getSelectedItem().toString());
+        intent.putExtra("DIRECCION", direccion.getText().toString().trim());
+        intent.putExtra("FECHA_NAC", fechaNacimiento.getText().toString().trim());
+
+        startActivity(intent);
     }
 }
