@@ -1,3 +1,4 @@
+
 package com.example.tp6_grupo_18;
 
 import android.content.ContentValues;
@@ -12,7 +13,7 @@ import java.util.List;
 public class ContactoDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "contactos.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     private static final String TABLE = "contactos";
     private static final String COL_ID = "id";
@@ -21,6 +22,7 @@ public class ContactoDBHelper extends SQLiteOpenHelper {
     private static final String COL_TELEFONO = "telefono";
     private static final String COL_TIPO_TEL = "tipo_telefono";
     private static final String COL_EMAIL = "email";
+    private static final String COL_TIPO_EMAIL = "tipo_email";
     private static final String COL_FECHA_NAC = "fecha_nacimiento";
     private static final String COL_DIRECCION = "direccion";
     private static final String COL_SEXO = "sexo";
@@ -36,6 +38,7 @@ public class ContactoDBHelper extends SQLiteOpenHelper {
                     COL_TELEFONO + " TEXT, " +
                     COL_TIPO_TEL + " TEXT, " +
                     COL_EMAIL + " TEXT, " +
+                    COL_TIPO_EMAIL + " TEXT, " +
                     COL_FECHA_NAC + " TEXT, " +
                     COL_DIRECCION + " TEXT, " +
                     COL_SEXO + " TEXT, " +
@@ -55,19 +58,23 @@ public class ContactoDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE " + TABLE +
+                    " ADD COLUMN " + COL_TIPO_EMAIL + " TEXT");
+        }
     }
 
     // Insertar un contacto
     public long insertar(Contacto c) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put(COL_NOMBRE, c.getNombre());
         values.put(COL_APELLIDO, c.getApellido());
         values.put(COL_TELEFONO, c.getTelefono());
         values.put(COL_TIPO_TEL, c.getTipoTelefono());
         values.put(COL_EMAIL, c.getEmail());
+        values.put(COL_TIPO_EMAIL, c.getTipoEmail());
         values.put(COL_FECHA_NAC, c.getFechaNacimiento());
         values.put(COL_DIRECCION, c.getDireccion());
         values.put(COL_SEXO, c.getSexo());
@@ -77,36 +84,46 @@ public class ContactoDBHelper extends SQLiteOpenHelper {
 
         long id = db.insert(TABLE, null, values);
         db.close();
+
         return id;
     }
 
     // Obtener todos los contactos
     public List<Contacto> obtenerTodos() {
         List<Contacto> lista = new ArrayList<>();
+
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE + " ORDER BY " + COL_NOMBRE, null);
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE + " ORDER BY " + COL_NOMBRE,
+                null
+        );
 
         if (cursor.moveToFirst()) {
             do {
                 Contacto c = new Contacto();
+
                 c.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
                 c.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COL_NOMBRE)));
                 c.setApellido(cursor.getString(cursor.getColumnIndexOrThrow(COL_APELLIDO)));
                 c.setTelefono(cursor.getString(cursor.getColumnIndexOrThrow(COL_TELEFONO)));
                 c.setTipoTelefono(cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO_TEL)));
                 c.setEmail(cursor.getString(cursor.getColumnIndexOrThrow(COL_EMAIL)));
+                c.setTipoEmail(cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO_EMAIL)));
                 c.setFechaNacimiento(cursor.getString(cursor.getColumnIndexOrThrow(COL_FECHA_NAC)));
                 c.setDireccion(cursor.getString(cursor.getColumnIndexOrThrow(COL_DIRECCION)));
                 c.setSexo(cursor.getString(cursor.getColumnIndexOrThrow(COL_SEXO)));
                 c.setIntereses(cursor.getString(cursor.getColumnIndexOrThrow(COL_INTERESES)));
                 c.setNewsletter(cursor.getInt(cursor.getColumnIndexOrThrow(COL_NEWSLETTER)) == 1);
                 c.setNotificaciones(cursor.getInt(cursor.getColumnIndexOrThrow(COL_NOTIFICACIONES)) == 1);
+
                 lista.add(c);
+
             } while (cursor.moveToNext());
         }
 
         cursor.close();
         db.close();
+
         return lista;
     }
 }

@@ -28,6 +28,9 @@ public class FormMasDatosContacto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_mas_datos);
 
+        android.widget.ScrollView scrollView = findViewById(R.id.scrollView);
+        scrollView.post(() -> scrollView.scrollTo(0, 0));
+
         rgSexo = findViewById(R.id.rgSexo);
         cbDeportes = findViewById(R.id.cbDeportes);
         cbMusica = findViewById(R.id.cbMusica);
@@ -59,16 +62,19 @@ public class FormMasDatosContacto extends AppCompatActivity {
     private void guardarContacto() {
         // Validar que se haya seleccionado un sexo
         int selectedSexoId = rgSexo.getCheckedRadioButtonId();
+
         if (selectedSexoId == -1) {
             Toast.makeText(this, "Debe seleccionar un sexo", Toast.LENGTH_SHORT).show();
             return;
         }
+
         RadioButton rbSexo = findViewById(selectedSexoId);
         String sexo = rbSexo.getText().toString().substring(0, 1);
 
         // Validar que se haya seleccionado al menos un interés
         boolean tieneInteres = cbDeportes.isChecked() || cbMusica.isChecked() ||
                 cbLectura.isChecked() || cbTecnologia.isChecked();
+
         if (!tieneInteres) {
             Toast.makeText(this, "Debe seleccionar al menos un interés", Toast.LENGTH_SHORT).show();
             return;
@@ -76,6 +82,7 @@ public class FormMasDatosContacto extends AppCompatActivity {
 
         // Construir lista de intereses
         StringBuilder intereses = new StringBuilder();
+
         if (cbDeportes.isChecked()) intereses.append("Deportes,");
         if (cbMusica.isChecked()) intereses.append("Música,");
         if (cbLectura.isChecked()) intereses.append("Lectura,");
@@ -83,10 +90,13 @@ public class FormMasDatosContacto extends AppCompatActivity {
 
         // Crear el contacto
         Contacto contacto = new Contacto();
+
         contacto.setNombre(nombre);
         contacto.setApellido(apellido);
         contacto.setTelefono(telefono);
+        contacto.setTipoTelefono(tipoTelefono);
         contacto.setEmail(email);
+        contacto.setTipoEmail(tipoEmail);
         contacto.setFechaNacimiento(fechaNac);
         contacto.setDireccion(direccion);
         contacto.setSexo(sexo);
@@ -100,6 +110,7 @@ public class FormMasDatosContacto extends AppCompatActivity {
 
         if (id > 0) {
             Toast.makeText(this, "Contacto guardado correctamente", Toast.LENGTH_SHORT).show();
+
             Intent intent = new Intent(this, FormAgregarContacto.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

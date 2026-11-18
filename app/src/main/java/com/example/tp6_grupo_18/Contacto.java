@@ -7,6 +7,8 @@ public class Contacto {
     private String telefono;
     private String tipoTelefono;
     private String email;
+
+    private String tipoEmail;
     private String fechaNacimiento;
     private String direccion;
     private String sexo;
@@ -33,6 +35,9 @@ public class Contacto {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getTipoEmail() { return tipoEmail; }
+    public void setTipoEmail(String tipoEmail) { this.tipoEmail = tipoEmail; }
 
     public String getFechaNacimiento() { return fechaNacimiento; }
     public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
