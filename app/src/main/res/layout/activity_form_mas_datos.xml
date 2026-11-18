@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Más Datos del Contacto"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sexo:"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <RadioGroup
+            android:id="@+id/rgSexo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/rbMasculino"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Masculino" />
+
+            <RadioButton
+                android:id="@+id/rbFemenino"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Femenino" />
+
+            <RadioButton
+                android:id="@+id/rbOtro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Otro" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Intereses:"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <CheckBox
+            android:id="@+id/cbDeportes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deportes" />
+
+        <CheckBox
+            android:id="@+id/cbMusica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Música" />
+
+        <CheckBox
+            android:id="@+id/cbLectura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lectura" />
+
+        <CheckBox
+            android:id="@+id/cbTecnologia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tecnología"
+            android:layout_marginBottom="16dp" />
+
+        <Switch
+            android:id="@+id/swNewsletter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suscribirse al newsletter"
+            android:layout_marginBottom="8dp" />
+
+        <Switch
+            android:id="@+id/swNotificaciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recibir notificaciones"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar" />
+
+    </LinearLayout>
+</ScrollView>

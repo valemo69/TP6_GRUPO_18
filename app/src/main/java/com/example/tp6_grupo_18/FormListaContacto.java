@@ -4,25 +4,78 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormListaContacto extends AppCompatActivity {
+
+    private ListView lvContactos;
+    private ContactoDBHelper dbHelper;
+    private List<Contacto> listaContactos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_form_lista_contacto);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        lvContactos = findViewById(R.id.lvContactos);
+        dbHelper = new ContactoDBHelper(this);
+
+        cargarLista();
+
+        lvContactos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contacto c = listaContactos.get(position);
+                mostrarDetalle(c);
+            }
         });
+    }
+
+    private void cargarLista() {
+        listaContactos = dbHelper.obtenerTodos();
+        List<String> nombres = new ArrayList<>();
+        for (Contacto c : listaContactos) {
+            nombres.add(c.getNombre() + " " + c.getApellido() + " - " + c.getEmail());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, nombres);
+        lvContactos.setAdapter(adapter);
+    }
+
+    private void mostrarDetalle(Contacto c) {
+        String detalle = "Nombre: " + c.getNombre() + "\n" +
+                "Apellido: " + c.getApellido() + "\n" +
+                "Teléfono: " + c.getTelefono() + " (" + c.getTipoTelefono() + ")\n" +
+                "Email: " + c.getEmail() + "\n" +
+                "Fecha de Nacimiento: " + c.getFechaNacimiento() + "\n" +
+                "Dirección: " + c.getDireccion() + "\n" +
+                "Sexo: " + c.getSexo() + "\n" +
+                "Intereses: " + c.getIntereses() + "\n" +
+                "Newsletter: " + (c.isNewsletter() ? "Sí" : "No") + "\n" +
+                "Notificaciones: " + (c.isNotificaciones() ? "Sí" : "No");
+
+        new AlertDialog.Builder(this)
+                .setTitle("Detalle del Contacto")
+                .setMessage(detalle)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarLista();
     }
 
     @Override
@@ -34,15 +87,13 @@ public class FormListaContacto extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.menu_agregar) {
-            Intent intent = new Intent(FormListaContacto.this, FormAgregarContacto.class);
+            Intent intent = new Intent(this, FormAgregarContacto.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.menu_listado) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ArrayList;
 
 public class FormAgregarContacto extends AppCompatActivity {
 
@@ -30,8 +32,11 @@ public class FormAgregarContacto extends AppCompatActivity {
     EditText email;
     EditText direccion;
     EditText fechaNacimiento;
+    Spinner spinnerTelefono;
+    Spinner spinnerEmail;
+    String tipoTelefonoSeleccionado;
+    String tipoEmailSeleccionado;
     Button btnContinuar;
-    Spinner spinnerTelefono, spinnerEmail;
 
 
 
@@ -48,15 +53,61 @@ public class FormAgregarContacto extends AppCompatActivity {
         email = findViewById(R.id.etEmail);
         direccion = findViewById(R.id.etDireccion);
         fechaNacimiento = findViewById(R.id.etFechaNacimiento);
-        btnContinuar = findViewById(R.id.btnContinuar);
         spinnerTelefono = findViewById(R.id.spinnerTelefono);
         spinnerEmail = findViewById(R.id.spinnerEmail);
+        btnContinuar = findViewById(R.id.btnContinuar);
 
-        cargarSpinners();
+        ArrayList<String> tipos = new ArrayList<>();
+        tipos.add("Casa");
+        tipos.add("Trabajo");
+        tipos.add("Móvil");
+
+        ArrayAdapter<String> adapterTelefono = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tipos);
+        ArrayAdapter<String> adapterEmail = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tipos);
+
+        spinnerTelefono.setAdapter(adapterTelefono);
+        spinnerEmail.setAdapter(adapterEmail);
+
+        spinnerTelefono.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tipoTelefonoSeleccionado = tipos.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerEmail.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tipoEmailSeleccionado = tipos.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         btnContinuar.setOnClickListener(v -> {
             if (validarFormulario()) {
-                enviarDatosSiguienteFormulario();
+                Intent intent = new Intent(FormAgregarContacto.this, FormMasDatosContacto.class);
+
+                intent.putExtra("nombre", nombre.getText().toString().trim());
+                intent.putExtra("apellido", apellido.getText().toString().trim());
+                intent.putExtra("telefono", telefono.getText().toString().trim());
+                intent.putExtra("tipoTelefono", tipoTelefonoSeleccionado);
+                intent.putExtra("email", email.getText().toString().trim());
+                intent.putExtra("tipoEmail", tipoEmailSeleccionado);
+                intent.putExtra("fechaNac", fechaNacimiento.getText().toString().trim());
+                intent.putExtra("direccion", direccion.getText().toString().trim());
+
+                startActivity(intent);
             }
         });
 
@@ -76,6 +127,7 @@ public class FormAgregarContacto extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.menu_agregar) {
             return true;
         } else if (id == R.id.menu_listado) {
@@ -83,6 +135,7 @@ public class FormAgregarContacto extends AppCompatActivity {
             startActivity(intent);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,6 +169,7 @@ public class FormAgregarContacto extends AppCompatActivity {
             return false;
         }
 
+
         if (apellidoIngresado.isEmpty()) {
             apellido.setError("El apellido es obligatorio");
             apellido.requestFocus();
@@ -127,6 +181,7 @@ public class FormAgregarContacto extends AppCompatActivity {
             apellido.requestFocus();
             return false;
         }
+
 
         if (telefonoIngresado.isEmpty()) {
             telefono.setError("El teléfono es obligatorio");
@@ -140,6 +195,7 @@ public class FormAgregarContacto extends AppCompatActivity {
             return false;
         }
 
+
         if (emailIngresado.isEmpty()) {
             email.setError("El email es obligatorio");
             email.requestFocus();
@@ -152,11 +208,13 @@ public class FormAgregarContacto extends AppCompatActivity {
             return false;
         }
 
+
         if (direccionIngresada.isEmpty()) {
             direccion.setError("La dirección es obligatoria");
             direccion.requestFocus();
             return false;
         }
+
 
         if (fechaIngresada.isEmpty()) {
             fechaNacimiento.setError("La fecha es obligatoria");
@@ -176,30 +234,7 @@ public class FormAgregarContacto extends AppCompatActivity {
             return false;
         }
 
+       
         return true;
-    }
-
-    private void cargarSpinners() {
-        String[] opciones = {"Casa", "Trabajo", "Móvil"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opciones);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinnerTelefono.setAdapter(adapter);
-        spinnerEmail.setAdapter(adapter);
-    }
-
-    private void enviarDatosSiguienteFormulario() {
-        Intent intent = new Intent(FormAgregarContacto.this, FormMasDatosContacto.class);
-
-        intent.putExtra("NOMBRE", nombre.getText().toString().trim());
-        intent.putExtra("APELLIDO", apellido.getText().toString().trim());
-        intent.putExtra("TELEFONO", telefono.getText().toString().trim());
-        intent.putExtra("TIPO_TELEFONO", spinnerTelefono.getSelectedItem().toString());
-        intent.putExtra("EMAIL", email.getText().toString().trim());
-        intent.putExtra("TIPO_EMAIL", spinnerEmail.getSelectedItem().toString());
-        intent.putExtra("DIRECCION", direccion.getText().toString().trim());
-        intent.putExtra("FECHA_NAC", fechaNacimiento.getText().toString().trim());
-
-        startActivity(intent);
     }
 }
