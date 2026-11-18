@@ -7,7 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ArrayList;
 
 public class FormAgregarContacto extends AppCompatActivity {
 
@@ -28,6 +30,8 @@ public class FormAgregarContacto extends AppCompatActivity {
     EditText email;
     EditText direccion;
     EditText fechaNacimiento;
+    Spinner spinnerTelefono;
+    Spinner spinnerEmail;
     Button btnContinuar;
 
 
@@ -40,15 +44,25 @@ public class FormAgregarContacto extends AppCompatActivity {
         setContentView(R.layout.activity_form_agregar_contacto);
 
         nombre = findViewById(R.id.etNombre);
-
-
-
         apellido = findViewById(R.id.etApellido);
         telefono = findViewById(R.id.etTelefono);
         email = findViewById(R.id.etEmail);
         direccion = findViewById(R.id.etDireccion);
         fechaNacimiento = findViewById(R.id.etFechaNacimiento);
+        spinnerTelefono = findViewById(R.id.spinnerTelefono);
+        spinnerEmail = findViewById(R.id.spinnerEmail);
         btnContinuar = findViewById(R.id.btnContinuar);
+
+        ArrayList<String> tipos = new ArrayList<>();
+        tipos.add("Casa");
+        tipos.add("Trabajo");
+        tipos.add("Móvil");
+
+        ArrayAdapter<String> adapterTelefono = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tipos);
+        ArrayAdapter<String> adapterEmail = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tipos);
+
+        spinnerTelefono.setAdapter(adapterTelefono);
+        spinnerEmail.setAdapter(adapterEmail);
 
         btnContinuar.setOnClickListener(v -> {
             if (validarFormulario()) {
