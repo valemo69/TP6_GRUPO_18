@@ -21,7 +21,7 @@ public class FormMasDatosContacto extends AppCompatActivity {
     private Switch swNewsletter, swNotificaciones;
     private Button btnGuardar;
 
-    private String nombre, apellido, telefono, email, fechaNac, direccion;
+    private String nombre, apellido, telefono, tipoTelefono, email, tipoEmail, fechaNac, direccion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,9 @@ public class FormMasDatosContacto extends AppCompatActivity {
         nombre = intent.getStringExtra("nombre");
         apellido = intent.getStringExtra("apellido");
         telefono = intent.getStringExtra("telefono");
+        tipoTelefono = getIntent().getStringExtra("tipoTelefono");
         email = intent.getStringExtra("email");
+        tipoEmail = getIntent().getStringExtra("tipoEmail");
         fechaNac = intent.getStringExtra("fechaNac");
         direccion = intent.getStringExtra("direccion");
 

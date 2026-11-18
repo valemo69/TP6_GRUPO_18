@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,8 @@ public class FormAgregarContacto extends AppCompatActivity {
     EditText fechaNacimiento;
     Spinner spinnerTelefono;
     Spinner spinnerEmail;
+    String tipoTelefonoSeleccionado;
+    String tipoEmailSeleccionado;
     Button btnContinuar;
 
 
@@ -64,15 +68,45 @@ public class FormAgregarContacto extends AppCompatActivity {
         spinnerTelefono.setAdapter(adapterTelefono);
         spinnerEmail.setAdapter(adapterEmail);
 
+        spinnerTelefono.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tipoTelefonoSeleccionado = tipos.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerEmail.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tipoEmailSeleccionado = tipos.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnContinuar.setOnClickListener(v -> {
             if (validarFormulario()) {
                 Intent intent = new Intent(FormAgregarContacto.this, FormMasDatosContacto.class);
+
                 intent.putExtra("nombre", nombre.getText().toString().trim());
                 intent.putExtra("apellido", apellido.getText().toString().trim());
                 intent.putExtra("telefono", telefono.getText().toString().trim());
+                intent.putExtra("tipoTelefono", tipoTelefonoSeleccionado);
                 intent.putExtra("email", email.getText().toString().trim());
+                intent.putExtra("tipoEmail", tipoEmailSeleccionado);
                 intent.putExtra("fechaNac", fechaNacimiento.getText().toString().trim());
                 intent.putExtra("direccion", direccion.getText().toString().trim());
+
                 startActivity(intent);
             }
         });
