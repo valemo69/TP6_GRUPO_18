@@ -4,21 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class FormListaContacto extends AppCompatActivity {
 
     private ListView lvContactos;
+    private TextView tvSinContactos;
     private ContactoDBHelper dbHelper;
     private List<Contacto> listaContactos;
 
@@ -27,48 +27,61 @@ public class FormListaContacto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_lista_contacto);
 
+        setTitle("Contactos");
+
         lvContactos = findViewById(R.id.lvContactos);
+        tvSinContactos = findViewById(R.id.tvSinContactos);
+        lvContactos.setEmptyView(tvSinContactos);
+
         dbHelper = new ContactoDBHelper(this);
 
         cargarLista();
 
-        lvContactos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Contacto c = listaContactos.get(position);
-                mostrarDetalle(c);
-            }
+        lvContactos.setOnItemClickListener((parent, view, position, id) -> {
+            Contacto c = listaContactos.get(position);
+            mostrarDetalle(c);
         });
     }
 
     private void cargarLista() {
         listaContactos = dbHelper.obtenerTodos();
-        List<String> nombres = new ArrayList<>();
+        List<String> items = new ArrayList<>();
+
         for (Contacto c : listaContactos) {
-            nombres.add(c.getNombre() + " " + c.getApellido() + " - " + c.getEmail());
+            String fila = valorSeguro(c.getNombre()) + " " +
+                    valorSeguro(c.getApellido()) + " - " +
+                    valorSeguro(c.getEmail());
+            items.add(fila.toUpperCase(Locale.getDefault()));
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, nombres);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                items
+        );
         lvContactos.setAdapter(adapter);
     }
 
     private void mostrarDetalle(Contacto c) {
-        String detalle = "Nombre: " + c.getNombre() + "\n" +
-                "Apellido: " + c.getApellido() + "\n" +
-                "Teléfono: " + c.getTelefono() + " (" + c.getTipoTelefono() + ")\n" +
-                "Email: " + c.getEmail() + " (" + c.getTipoEmail() + ")\n" +
-                "Fecha de Nacimiento: " + c.getFechaNacimiento() + "\n" +
-                "Dirección: " + c.getDireccion() + "\n" +
-                "Nivel de Estudios: " + c.getNivelEstudios() + "\n" +
-                "Intereses: " + c.getIntereses() + "\n" +
+        String detalle = "Nombre: " + valorSeguro(c.getNombre()) + "\n" +
+                "Apellido: " + valorSeguro(c.getApellido()) + "\n" +
+                "Teléfono: " + valorSeguro(c.getTelefono()) + " (" + valorSeguro(c.getTipoTelefono()) + ")\n" +
+                "Email: " + valorSeguro(c.getEmail()) + " (" + valorSeguro(c.getTipoEmail()) + ")\n" +
+                "Fecha de Nacimiento: " + valorSeguro(c.getFechaNacimiento()) + "\n" +
+                "Dirección: " + valorSeguro(c.getDireccion()) + "\n" +
+                "Nivel de Estudios: " + valorSeguro(c.getNivelEstudios()) + "\n" +
+                "Intereses: " + valorSeguro(c.getIntereses()) + "\n" +
                 "Recibe información: " + (c.isRecibeInformacion() ? "Sí" : "No");
 
         new AlertDialog.Builder(this)
                 .setTitle("Detalle del Contacto")
                 .setMessage(detalle)
-                .setPositiveButton("OK", null)
+                .setPositiveButton("Cerrar", null)
                 .show();
+    }
+
+    private String valorSeguro(String valor) {
+        return (valor == null || valor.trim().isEmpty()) ? "-" : valor.trim();
     }
 
     @Override
@@ -88,7 +101,9 @@ public class FormListaContacto extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.menu_agregar) {
             Intent intent = new Intent(this, FormAgregarContacto.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
             return true;
         } else if (id == R.id.menu_listado) {
             return true;
