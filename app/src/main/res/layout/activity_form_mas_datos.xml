@@ -15,95 +15,123 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Más Datos del Contacto"
+            android:text="FORMULARIO DE CONTACTO"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A continuación, por favor se pide completar más datos personales."
+            android:textSize="14sp"
             android:layout_marginBottom="16dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sexo:"
+            android:text="NIVEL DE ESTUDIOS ALCANZADOS"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
         <RadioGroup
-            android:id="@+id/rgSexo"
+            android:id="@+id/rgNivelEstudios"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginBottom="16dp">
 
             <RadioButton
-                android:id="@+id/rbMasculino"
+                android:id="@+id/rbPrimarioIncompleto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Masculino" />
+                android:text="Primario incompleto" />
 
             <RadioButton
-                android:id="@+id/rbFemenino"
+                android:id="@+id/rbPrimarioCompleto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Femenino" />
+                android:text="Primario completo" />
 
             <RadioButton
-                android:id="@+id/rbOtro"
+                android:id="@+id/rbSecundarioIncompleto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Otro" />
+                android:text="Secundario incompleto" />
+
+            <RadioButton
+                android:id="@+id/rbSecundarioCompleto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Secundario completo" />
+
+            <RadioButton
+                android:id="@+id/rbOtros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Otros" />
         </RadioGroup>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Intereses:"
+            android:text="INTERESES"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
-        <CheckBox
-            android:id="@+id/cbDeportes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Deportes" />
-
-        <CheckBox
-            android:id="@+id/cbMusica"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Música" />
-
-        <CheckBox
-            android:id="@+id/cbLectura"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lectura" />
-
-        <CheckBox
-            android:id="@+id/cbTecnologia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tecnología"
-            android:layout_marginBottom="16dp" />
-
-        <Switch
-            android:id="@+id/swNewsletter"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Suscribirse al newsletter"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal">
 
-        <Switch
-            android:id="@+id/swNotificaciones"
+            <CheckBox
+                android:id="@+id/cbDeporte"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Deporte" />
+
+            <CheckBox
+                android:id="@+id/cbMusica"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Música" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Recibir notificaciones"
-            android:layout_marginBottom="16dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/cbArte"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Arte" />
+
+            <CheckBox
+                android:id="@+id/cbTecnologia"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tecnología" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/swRecibeInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿DESEA RECIBIR INFORMACIÓN?"
+            android:layout_marginBottom="20dp" />
 
         <Button
             android:id="@+id/btnGuardar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Guardar" />
+            android:text="GUARDAR" />
 
     </LinearLayout>
 </ScrollView>

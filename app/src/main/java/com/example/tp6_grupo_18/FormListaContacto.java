@@ -57,13 +57,12 @@ public class FormListaContacto extends AppCompatActivity {
         String detalle = "Nombre: " + c.getNombre() + "\n" +
                 "Apellido: " + c.getApellido() + "\n" +
                 "Teléfono: " + c.getTelefono() + " (" + c.getTipoTelefono() + ")\n" +
-                "Email: " + c.getEmail() + "\n" +
+                "Email: " + c.getEmail() + " (" + c.getTipoEmail() + ")\n" +
                 "Fecha de Nacimiento: " + c.getFechaNacimiento() + "\n" +
                 "Dirección: " + c.getDireccion() + "\n" +
-                "Sexo: " + c.getSexo() + "\n" +
+                "Nivel de Estudios: " + c.getNivelEstudios() + "\n" +
                 "Intereses: " + c.getIntereses() + "\n" +
-                "Newsletter: " + (c.isNewsletter() ? "Sí" : "No") + "\n" +
-                "Notificaciones: " + (c.isNotificaciones() ? "Sí" : "No");
+                "Recibe información: " + (c.isRecibeInformacion() ? "Sí" : "No");
 
         new AlertDialog.Builder(this)
                 .setTitle("Detalle del Contacto")

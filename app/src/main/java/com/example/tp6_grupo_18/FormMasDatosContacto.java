@@ -2,23 +2,27 @@ package com.example.tp6_grupo_18;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FormMasDatosContacto extends AppCompatActivity {
 
-    private RadioGroup rgSexo;
-    private CheckBox cbDeportes, cbMusica, cbLectura, cbTecnologia;
-    private Switch swNewsletter, swNotificaciones;
+    private RadioGroup rgNivelEstudios;
+    private CheckBox cbDeporte, cbMusica, cbArte, cbTecnologia;
+    private Switch swRecibeInfo;
     private Button btnGuardar;
 
     private String nombre, apellido, telefono, tipoTelefono, email, tipoEmail, fechaNac, direccion;
@@ -28,69 +32,51 @@ public class FormMasDatosContacto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_mas_datos);
 
-        android.widget.ScrollView scrollView = findViewById(R.id.scrollView);
+        ScrollView scrollView = findViewById(R.id.scrollView);
         scrollView.post(() -> scrollView.scrollTo(0, 0));
 
-        rgSexo = findViewById(R.id.rgSexo);
-        cbDeportes = findViewById(R.id.cbDeportes);
+        rgNivelEstudios = findViewById(R.id.rgNivelEstudios);
+        cbDeporte = findViewById(R.id.cbDeporte);
         cbMusica = findViewById(R.id.cbMusica);
-        cbLectura = findViewById(R.id.cbLectura);
+        cbArte = findViewById(R.id.cbArte);
         cbTecnologia = findViewById(R.id.cbTecnologia);
-        swNewsletter = findViewById(R.id.swNewsletter);
-        swNotificaciones = findViewById(R.id.swNotificaciones);
+        swRecibeInfo = findViewById(R.id.swRecibeInfo);
         btnGuardar = findViewById(R.id.btnGuardar);
 
-        // Recibir datos del formulario anterior
         Intent intent = getIntent();
         nombre = intent.getStringExtra("nombre");
         apellido = intent.getStringExtra("apellido");
         telefono = intent.getStringExtra("telefono");
-        tipoTelefono = getIntent().getStringExtra("tipoTelefono");
+        tipoTelefono = intent.getStringExtra("tipoTelefono");
         email = intent.getStringExtra("email");
-        tipoEmail = getIntent().getStringExtra("tipoEmail");
+        tipoEmail = intent.getStringExtra("tipoEmail");
         fechaNac = intent.getStringExtra("fechaNac");
         direccion = intent.getStringExtra("direccion");
 
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                guardarContacto();
-            }
-        });
+        btnGuardar.setOnClickListener(v -> guardarContacto());
     }
 
     private void guardarContacto() {
-        // Validar que se haya seleccionado un sexo
-        int selectedSexoId = rgSexo.getCheckedRadioButtonId();
-
-        if (selectedSexoId == -1) {
-            Toast.makeText(this, "Debe seleccionar un sexo", Toast.LENGTH_SHORT).show();
+        int selectedEstudioId = rgNivelEstudios.getCheckedRadioButtonId();
+        if (selectedEstudioId == -1) {
+            Toast.makeText(this, "Debe seleccionar un nivel de estudios", Toast.LENGTH_SHORT).show();
             return;
         }
+        RadioButton rbEstudio = findViewById(selectedEstudioId);
+        String nivelEstudios = rbEstudio.getText().toString();
 
-        RadioButton rbSexo = findViewById(selectedSexoId);
-        String sexo = rbSexo.getText().toString().substring(0, 1);
+        List<String> listaIntereses = new ArrayList<>();
+        if (cbDeporte.isChecked()) listaIntereses.add("Deporte");
+        if (cbMusica.isChecked()) listaIntereses.add("Música");
+        if (cbArte.isChecked()) listaIntereses.add("Arte");
+        if (cbTecnologia.isChecked()) listaIntereses.add("Tecnología");
 
-        // Validar que se haya seleccionado al menos un interés
-        boolean tieneInteres = cbDeportes.isChecked() || cbMusica.isChecked() ||
-                cbLectura.isChecked() || cbTecnologia.isChecked();
-
-        if (!tieneInteres) {
+        if (listaIntereses.isEmpty()) {
             Toast.makeText(this, "Debe seleccionar al menos un interés", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Construir lista de intereses
-        StringBuilder intereses = new StringBuilder();
-
-        if (cbDeportes.isChecked()) intereses.append("Deportes,");
-        if (cbMusica.isChecked()) intereses.append("Música,");
-        if (cbLectura.isChecked()) intereses.append("Lectura,");
-        if (cbTecnologia.isChecked()) intereses.append("Tecnología,");
-
-        // Crear el contacto
         Contacto contacto = new Contacto();
-
         contacto.setNombre(nombre);
         contacto.setApellido(apellido);
         contacto.setTelefono(telefono);
@@ -99,12 +85,10 @@ public class FormMasDatosContacto extends AppCompatActivity {
         contacto.setTipoEmail(tipoEmail);
         contacto.setFechaNacimiento(fechaNac);
         contacto.setDireccion(direccion);
-        contacto.setSexo(sexo);
-        contacto.setIntereses(intereses.toString());
-        contacto.setNewsletter(swNewsletter.isChecked());
-        contacto.setNotificaciones(swNotificaciones.isChecked());
+        contacto.setNivelEstudios(nivelEstudios);
+        contacto.setIntereses(TextUtils.join(", ", listaIntereses));
+        contacto.setRecibeInformacion(swRecibeInfo.isChecked());
 
-        // Guardar en SQLite
         ContactoDBHelper dbHelper = new ContactoDBHelper(this);
         long id = dbHelper.insertar(contacto);
 

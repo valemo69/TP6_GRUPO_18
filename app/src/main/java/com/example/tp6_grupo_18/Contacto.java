@@ -7,14 +7,12 @@ public class Contacto {
     private String telefono;
     private String tipoTelefono;
     private String email;
-
     private String tipoEmail;
     private String fechaNacimiento;
     private String direccion;
-    private String sexo;
+    private String nivelEstudios;
     private String intereses;
-    private boolean newsletter;
-    private boolean notificaciones;
+    private boolean recibeInformacion;
 
     public Contacto() {}
 
@@ -45,17 +43,14 @@ public class Contacto {
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public String getSexo() { return sexo; }
-    public void setSexo(String sexo) { this.sexo = sexo; }
+    public String getNivelEstudios() { return nivelEstudios; }
+    public void setNivelEstudios(String nivelEstudios) { this.nivelEstudios = nivelEstudios; }
 
     public String getIntereses() { return intereses; }
     public void setIntereses(String intereses) { this.intereses = intereses; }
 
-    public boolean isNewsletter() { return newsletter; }
-    public void setNewsletter(boolean newsletter) { this.newsletter = newsletter; }
-
-    public boolean isNotificaciones() { return notificaciones; }
-    public void setNotificaciones(boolean notificaciones) { this.notificaciones = notificaciones; }
+    public boolean isRecibeInformacion() { return recibeInformacion; }
+    public void setRecibeInformacion(boolean recibeInformacion) { this.recibeInformacion = recibeInformacion; }
 
     @Override
     public String toString() {
